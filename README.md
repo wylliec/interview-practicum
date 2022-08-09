@@ -16,6 +16,7 @@ The .Net Developer Practicum is an exercise to extend the functionality of an ex
 
 - Take the time to walk through the existing functionality before trying to make changes
 - Feel free to add 3rd party packages as needed
+- Take opportunities to refactor the code and make it better.
 
 **Technical Requirements:**
 
