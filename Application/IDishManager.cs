@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Application
+namespace Application;
+
+public interface IDishManager
 {
-  public interface IDishManager
-  {
-    /// <summary>
-    /// Constructs a list of dishes, each dish with a name and a count
-    /// </summary>
-    /// <param name="order"></param>
-    /// <returns></returns>
-    Task<List<Dish>> GetDishes(Order order);
-  }
+  /// <summary>
+  ///     Constructs a list of dishes, each dish with a name and a count
+  /// </summary>
+  /// <param name="order"></param>
+  /// <returns></returns>
+  Task<List<Dish>> GetDishes(Order order);
 }

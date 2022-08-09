@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Application
+namespace Application;
+
+public class Order
 {
-    public class Order
+    public Order()
     {
-        public Order()
-        {
-            Dishes = new List<int>();
-        }
-        public List<int> Dishes { get; set; }
+        Dishes = new List<int>();
     }
+
+    public List<int> Dishes { get; set; }
 }

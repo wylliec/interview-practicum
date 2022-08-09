@@ -6,7 +6,7 @@ The .Net Developer Practicum is an exercise to extend the functionality of an ex
 
 **The .NET Developer practicum is evaluated on:**
 
-1. Object Oriented Design
+1. Object Oriented Design and SOLID principles
 2. Readability
 3. Maintainability
 4. Testability
@@ -20,6 +20,7 @@ The .Net Developer Practicum is an exercise to extend the functionality of an ex
 **Technical Requirements:**
 
 Solution must:
+
 - Compile without errors
 - Run from the command line
 - Pass all automated test cases

@@ -3,43 +3,41 @@ using System.Linq;
 using Application;
 using NUnit.Framework;
 
+namespace ApplicationTests;
 
-namespace ApplicationTests
+[TestFixture]
+public class DishManagerTests
 {
-    [TestFixture]
-    public class DishManagerTests
+    [SetUp]
+    public void Setup()
     {
-        private DishManager _sut;
+        _sut = new DishManager();
+    }
 
-        [SetUp]
-        public void Setup()
-        {
-            _sut = new DishManager();
-        }
+    private DishManager _sut;
 
-        [Test]
-        public void EmptyListReturnsEmptyList()
-        {
-            var order = new Order();
-            var actual = _sut.GetDishes(order).Result;
-            Assert.AreEqual(0, actual.Count);
-        }
+    [Test]
+    public void EmptyListReturnsEmptyList()
+    {
+        var order = new Order();
+        var actual = _sut.GetDishes(order).Result;
+        Assert.AreEqual(0, actual.Count);
+    }
 
-        [Test]
-        public void ListWith1ReturnsOneSteak()
+    [Test]
+    public void ListWith1ReturnsOneSteak()
+    {
+        var order = new Order
         {
-            var order = new Order
+            Dishes = new List<int>
             {
-                Dishes = new List<int>
-                {
-                    1
-                }
-            };
+                1
+            }
+        };
 
-            var actual = _sut.GetDishes(order).Result;
-            Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual("steak", actual.First().DishName);
-            Assert.AreEqual(1, actual.First().Count);
-        }
+        var actual = _sut.GetDishes(order).Result;
+        Assert.AreEqual(1, actual.Count);
+        Assert.AreEqual("steak", actual.First().DishName);
+        Assert.AreEqual(1, actual.First().Count);
     }
 }
