@@ -11,7 +11,11 @@ internal class Program
         while (true)
         {
             var unparsedOrder = System.Console.ReadLine();
-            var output = await Task.Run(() => server.TakeOrder(unparsedOrder).Result);
+            if (unparsedOrder == "")
+            {
+                break;
+            }
+            var output = await server.TakeOrder(unparsedOrder);
             System.Console.WriteLine(output);
         }
     }

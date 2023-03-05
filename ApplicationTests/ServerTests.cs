@@ -1,4 +1,5 @@
-﻿using Application;
+﻿using System.Threading.Tasks;
+using Application;
 using NUnit.Framework;
 
 namespace ApplicationTests;
@@ -12,73 +13,107 @@ public class ServerTests
         _sut = new Server();
     }
 
-    [TearDown]
-    public void Teardown()
-    {
-    }
-
     private Server _sut;
 
-    [Test]
-    public void ErrorGetsReturnedWithBadInput()
-    {
-        var order = "one";
-        var expected = "error";
-        var actual = _sut.TakeOrder(order).Result;
+    public async Task TestServer(string order, string expected) {
+        var actual = await _sut.TakeOrder(order);
         Assert.AreEqual(expected, actual);
     }
 
     [Test]
-    public void CanServeSteak()
+    public async Task ErrorNoTimeOfDay()
     {
-        var order = "1";
-        var expected = "steak";
-        var actual = _sut.TakeOrder(order).Result;
-        Assert.AreEqual(expected, actual);
+        await this.TestServer(order: "1,2", expected: "error");
     }
 
     [Test]
-    public void CanServe2Potatoes()
+    public async Task ErrorBadTimeOfDay()
     {
-        var order = "2,2";
-        var expected = "potato(x2)";
-        var actual = _sut.TakeOrder(order).Result;
-        Assert.AreEqual(expected, actual);
+        await this.TestServer(order: "noon,1", expected: "error");
     }
 
     [Test]
-    public void CanServeSteakPotatoWineCake()
+    public async Task CanServeEggWhitespace()
     {
-        var order = "1,2,3,4";
-        var expected = "steak,potato,wine,cake";
-        var actual = _sut.TakeOrder(order).Result;
-        Assert.AreEqual(expected, actual);
+        await this.TestServer(order: "   morning    ,          1    ", expected: "egg");
+    }
+
+
+    [Test]
+    public async Task CanServeEggToastCoffee()
+    {
+        await this.TestServer(order: "morning, 1, 2, 3", expected: "egg,toast,coffee");
     }
 
     [Test]
-    public void CanServeSteakPotatox2Cake()
+    public async Task CanServe3Coffee()
     {
-        var order = "1,2,2,4";
-        var expected = "steak,potato(x2),cake";
-        var actual = _sut.TakeOrder(order).Result;
-        Assert.AreEqual(expected, actual);
+        await this.TestServer(order: "Morning,3,3,3", expected: "coffee(x3)");
     }
 
     [Test]
-    public void CanGenerateErrorWithWrongDish()
+    public async Task CanServeEggToastCoffeex2()
     {
-        var order = "1,2,3,5";
-        var expected = "error";
-        var actual = _sut.TakeOrder(order).Result;
-        Assert.AreEqual(expected, actual);
+        await this.TestServer(order: "morning ,1,3,2,3", expected: "egg,toast,coffee(x2)");
     }
 
     [Test]
-    public void CanGenerateErrorWhenTryingToServerMoreThanOneSteak()
+    public async Task ErrorMoreThanOneToast()
     {
-        var order = "1,1,2,3";
-        var expected = "error";
-        var actual = _sut.TakeOrder(order).Result;
-        Assert.AreEqual(expected, actual);
+        await this.TestServer(order: "morning, 1, 2, 2", expected: "error");
+    }
+
+    [Test]
+    public async Task ErrorNoBreakfastDessert()
+    {
+        await this.TestServer(order: "morning, 1, 2, 4", expected: "error");
+    }
+
+    [Test]
+    public async Task ErrorBadDishInput()
+    {
+        await this.TestServer(order: "evening,one", expected: "error");
+    }
+
+    [Test]
+    public async Task CanServeSteak()
+    {
+        await this.TestServer(order: "evening,1", expected: "steak");
+    }
+
+    [Test]
+    public async Task CanServe2Potatoes()
+    {
+        await this.TestServer(order: "evening,2,2", expected: "potato(x2)");
+    }
+
+    [Test]
+    public async Task CanServeSteakPotatoWineCake()
+    {
+        await this.TestServer(order: "evening,1,2,3,4", expected: "steak,potato,wine,cake");
+    }
+
+    [Test]
+    public async Task CanServeSteakPotatox2Cake()
+    {
+        await this.TestServer(order: "evening,1,2,2,4", expected: "steak,potato(x2),cake");
+    }
+
+    [Test]
+    public async Task ErrorWrongDish()
+    {
+        await this.TestServer(order: "evening,1,2,3,5", expected: "error");
+    }
+
+    [Test]
+    public async Task ErrorMoreThanOneSteak()
+    {
+        await this.TestServer(order: "evening,1,1,2,3", expected: "error");
+    }
+
+    [Test]
+    public async Task ErrorMoreThanOneWine()
+    {
+        await this.TestServer(order: "evening,1,3,2,3", expected: "error");
     }
 }
